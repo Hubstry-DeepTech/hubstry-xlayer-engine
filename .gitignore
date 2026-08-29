@@ -1,0 +1,21 @@
+﻿# Dados do ONS â€” NUNCA commitar.
+# O CSV mensal chega a 160 MB e estoura o limite rigido de 100 MB do
+# GitHub. O parquet, mesmo com 3-9 MB, infla o repositorio de forma
+# irreversivel a cada mes baixado.
+data/
+*.parquet
+*.csv
+*.xlsx
+
+# PDFs normativos: sao publicos e grandes; guardar o link, nao o arquivo.
+docs/*.pdf
+
+# Ambiente
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Sistema
+Thumbs.db
+.DS_Store
