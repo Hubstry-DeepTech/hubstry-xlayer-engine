@@ -211,3 +211,37 @@ O motor combinatorio ganha lugar quando ha disputa real pela mesma
 energia: sinks compartilhados entre parques, acoplamento temporal com
 armazenamento, ou limite de linha comum. O X-Layer escolhe o metodo
 adequado a estrutura do problema.
+
+---
+
+## Fronteira de licenciamento
+
+Este repositório é distribuído sob **Apache License 2.0** (ver `LICENSE`),
+com exceção dos materiais de terceiros identificados em `NOTICE`.
+
+### Materiais não cobertos pela Apache-2.0
+
+| Item | Titular | Regime |
+|---|---|---|
+| `docs/NT-ONS_DOP_0022_2025.pdf` | ONS | documento público, direitos do ONS |
+| Dados operacionais do ONS | ONS | CC-BY 4.0, não versionados |
+
+### Relação com o Hubstry Logistics Quantum
+
+`Hubstry-DeepTech/hubstry-logistics-quantum` é distribuído sob
+**CC BY-NC-SA 4.0** e permanece sob essa licença. Os regimes são
+deliberadamente distintos: são projetos diferentes, com finalidades
+diferentes.
+
+**Este repositório não incorpora, copia nem deriva código daquele.** A
+relação entre os dois é de genealogia intelectual — a mesma classe de
+reformulação matemática aplicada a outro domínio — e não de derivação de
+obra. Todo o código aqui foi escrito originalmente para este projeto.
+
+A formulação de otimização binária quadrática tem publicação anterior
+(Zenodo, DOI 10.5281/zenodo.20467804) e deve ser considerada em conjunto
+com sua fonte.
+
+### Autoria
+
+Autoria única, sem contribuições de terceiros, em ambos os repositórios.

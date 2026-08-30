@@ -69,3 +69,15 @@ Codigo Python — docstrings, comentarios e strings impressas no terminal —
 e escrito SEM acentuacao, deliberadamente. O console do Windows usa
 codificacao que quebra em caracteres acentuados na saida dos scripts.
 Nao "corrigir" automaticamente: a alteracao quebra a execucao.
+
+## Proveniência e reprodutibilidade
+
+O projeto privilegia reprodutibilidade sobre opacidade. Dados públicos do
+ONS, critérios normativos, hipóteses, limitações e resultados intermediários
+são documentados. Quando uma interpretação é refutada por teste, a alteração
+metodológica é registrada em vez de ocultada.
+
+## Licença
+
+Apache License 2.0, exceto materiais de terceiros identificados em `NOTICE`.
+Ver `docs/PROVENIENCIA.md` para a fronteira de licenciamento.
