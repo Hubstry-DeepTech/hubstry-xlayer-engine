@@ -1,5 +1,53 @@
 """
-Hubstry X-Layer Engine — Baseline normativo do ONS
+Hubstry X-Layer Engine — Baselines normativos do ONS
+====================================================
+AVISO — RECLASSIFICACAO APOS LEITURA DA NORMA (29/08/2026)
+----------------------------------------------------------
+A leitura integral da NT-ONS DOP 0022/2025 mostrou que os dois
+"baselines" antes tratados como criterios concorrentes pertencem a
+FASES DIFERENTES do processo operativo:
+
+  secao 5 — PROGRAMACAO DA OPERACAO (dia anterior, no PDO)
+    5.1.2-IV: reduz-se a geracao das usinas/conjuntos eolicos e/ou
+    solar fotovoltaicos "proporcional as suas disponibilidades".
+
+  secao 6 — OPERACAO EM TEMPO REAL (execucao, via Gerdin)
+    6.1 (razao energetica): rateio proporcional ao PONTO DE PARTIDA
+    verificado no instante da restricao.
+
+Os dados de constrained-off registram restricoes EXECUTADAS. Compara-
+las contra o criterio de programacao e comparar objetos de naturezas
+diferentes.
+
+CONSEQUENCIA: o resultado de 60,15% de observacoes divergentes e a
+divergencia acumulada de 115.407 MW NAO sao evidencia de conflito
+entre criterios normativos. Sao artefato de comparar programacao com
+execucao. Nao devem ser usados como resultado cientifico.
+
+O rateio por disponibilidade permanece neste modulo como
+`programacao_excedente` — referencia documental da fase de
+programacao, nao baseline de execucao.
+
+NOTA DE LITERALIDADE: o rateio "proporcional a disponibilidade
+DECLARADA DE POTENCIA" aparece no item III, para hidreletricas com
+vertimento. O item IV, das renovaveis variaveis, diz apenas
+"proporcional as suas disponibilidades". Que ambos usem a mesma base
+e inferencia nossa, nao literalidade do texto.
+
+CRITERIOS DE EXECUCAO POR RAZAO (secao 6)
+-----------------------------------------
+  ENE  6.1     rateio proporcional ao ponto de partida
+               -> REPRODUZIVEL: implementado aqui
+  CNF  6.2.1/2 agrupamento por sensibilidade equivalente, esgotamento
+               em ordem decrescente, rateio proporcional apenas no
+               ultimo grupo
+               -> NAO REPRODUZIVEL sem as tabelas de sensibilidade
+  REL  6.2.1/2 mesmo criterio de CNF
+               -> NAO REPRODUZIVEL sem as tabelas de sensibilidade
+
+As tabelas de sensibilidade sao calculadas pelo SACI e cadastradas no
+Gerdin. O historico e publicado no SINtegre. Enquanto nao forem
+incorporadas, CNF e REL nao tem baseline de execucao neste modulo.
 ==================================================
 Implementa a ordem de prioridade de reducao de geracao em excedente
 energetico, conforme NT-ONS DOP 0022/2025, "Criterios para Gestao de
@@ -122,16 +170,30 @@ class ResultadoBaseline:
 def rateio_proporcional(
     usinas: List[Usina],
     corte_necessario_mw: float,
-    base: Literal["disponibilidade", "ponto_de_partida"] = "disponibilidade",
+    base: Literal["disponibilidade", "ponto_de_partida"] = "ponto_de_partida",
 ) -> ResultadoBaseline:
     """
-    Item IV da secao 5.1.2 (base="disponibilidade") ou rateio de tempo
-    real da secao 6.1 (base="ponto_de_partida").
+    base="ponto_de_partida" -> secao 6.1, EXECUCAO em tempo real para
+                               razao energetica. E este o baseline.
+    base="disponibilidade"  -> secao 5.1.2-IV, PROGRAMACAO diaria.
+                               Referencia documental; nao comparar com
+                               dados de execucao.
 
     O rateio e iterativo: uma usina nao pode ser cortada alem da
     propria geracao. Quando o cabimento de alguma satura, o excedente
     e redistribuido entre as demais — comportamento necessario para o
     rateio fechar o montante solicitado.
+
+    A secao 6.1 PREVE ajuste de parcela: o rateio e proporcional ao
+    ponto de partida "exceto nos casos em que a parcela correspondente
+    a determinado conjunto/usina possa provocar violacao de limites de
+    transmissao ou de outros criterios operativos, situacao em que a
+    parcela e ajustada".
+
+    Ou seja: ajustar parcela e normativo. O QUE a norma NAO especifica
+    e COMO ajustar. A redistribuicao proporcional implementada aqui e
+    uma escolha nossa, compativel com o texto mas nao determinada por
+    ele. Documentar como tal em qualquer resultado.
     """
     if corte_necessario_mw <= 0:
         return ResultadoBaseline("nenhum corte necessario", {}, 0.0)
@@ -182,6 +244,49 @@ def rateio_proporcional(
                    "ponto de partida")
     return ResultadoBaseline(rotulo, cortes, round(total, 4),
                              round(max(restante, 0.0), 4), obs)
+
+
+def programacao_excedente(usinas: List[Usina],
+                          corte_necessario_mw: float) -> ResultadoBaseline:
+    """
+    Secao 5.1.2-IV — criterio da PROGRAMACAO diaria, nao da execucao.
+
+    Mantido como referencia documental. NAO usar como baseline contra
+    dados de constrained-off, que registram execucao.
+    """
+    return rateio_proporcional(usinas, corte_necessario_mw,
+                               base="disponibilidade")
+
+
+def baseline_execucao_ene(usinas: List[Usina],
+                          corte_necessario_mw: float) -> ResultadoBaseline:
+    """
+    Secao 6.1 — criterio de EXECUCAO em tempo real para razao
+    energetica (ENE). E o unico baseline reproduzivel com os dados
+    publicos disponiveis.
+    """
+    return rateio_proporcional(usinas, corte_necessario_mw,
+                               base="ponto_de_partida")
+
+
+def baseline_execucao_eletrica(razao: str) -> None:
+    """
+    Secoes 6.2.1 e 6.2.2 — CNF e REL.
+
+    NAO IMPLEMENTADO. O criterio exige as tabelas de sensibilidade
+    calculadas pelo SACI e cadastradas no Gerdin: agrupamento por
+    sensibilidade equivalente (apos arredondamento ao inteiro),
+    ordenacao decrescente, esgotamento em ordem, e rateio proporcional
+    ao ponto de partida apenas no ultimo grupo.
+
+    Sem essas tabelas, qualquer reproducao seria invencao. O historico
+    e publicado no SINtegre.
+    """
+    raise NotImplementedError(
+        f"criterio de execucao para {razao} exige tabelas de sensibilidade "
+        "do SACI/Gerdin (NT-ONS DOP 0022/2025, secoes 6.2.1 e 6.2.2); "
+        "historico publicado no SINtegre"
+    )
 
 
 def prioridade_por_razao(razoes_no_patamar: List[str]) -> str:
