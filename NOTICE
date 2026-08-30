@@ -1,0 +1,38 @@
+Hubstry X-Layer Engine
+Copyright 2026 Guilherme Goncalves Machado / Hubstry Deep Tech
+
+Este produto inclui software desenvolvido pela Hubstry Deep Tech,
+licenciado sob a Apache License, Version 2.0 (ver LICENSE).
+
+MATERIAIS DE TERCEIROS
+======================
+
+Os itens abaixo NAO sao cobertos pela Apache License 2.0 e permanecem
+sujeitos aos termos de seus respectivos titulares.
+
+1. docs/NT-ONS_DOP_0022_2025.pdf
+   "Criterios para Gestao de Excedentes Energeticos", NT-ONS DOP
+   0022/2025, 19 de agosto de 2025.
+   (c) 2025 Operador Nacional do Sistema Eletrico (ONS).
+   Documento publico, mantido neste repositorio para reprodutibilidade
+   da analise. Todos os direitos reservados ao ONS.
+   Fonte: https://www.ons.org.br
+
+2. Dados operacionais do ONS
+   Portal de Dados Abertos do ONS, bucket publico
+   ons-aws-prod-opendata (Registry of Open Data on AWS).
+   Licenca CC-BY 4.0.
+   Os dados NAO sao versionados neste repositorio; o codigo apenas os
+   consome em tempo de execucao.
+
+RELACAO COM OUTROS REPOSITORIOS
+===============================
+
+Hubstry-DeepTech/hubstry-logistics-quantum e distribuido sob
+CC BY-NC-SA 4.0 e permanece sob essa licenca.
+
+Este repositorio NAO incorpora, copia ou deriva codigo daquele
+repositorio. A relacao entre os dois e de genealogia intelectual — a
+mesma classe de reformulacao matematica aplicada a outro dominio — e
+nao de derivacao de obra. Todo o codigo aqui foi escrito
+originalmente para este projeto.
