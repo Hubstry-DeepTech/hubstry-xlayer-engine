@@ -60,3 +60,12 @@ semântica das colunas e quebras metodológicas conhecidas.
 As tecnologias da Hubstry não são licenciadas para armas autônomas de
 inteligência artificial nem para vigilância de cidadãos. Cláusula
 inegociável.
+
+## Convencao de acentuacao
+
+Markdown (README, docs) usa acentuacao normal do portugues.
+
+Codigo Python � docstrings, comentarios e strings impressas no terminal �
+e escrito SEM acentuacao, deliberadamente. O console do Windows usa
+codificacao que quebra em caracteres acentuados na saida dos scripts.
+Nao "corrigir" automaticamente: a alteracao quebra a execucao.
