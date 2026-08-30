@@ -7,8 +7,6 @@ data/
 *.csv
 *.xlsx
 
-# PDFs normativos: sao publicos e grandes; guardar o link, nao o arquivo.
-docs/*.pdf
 
 # Ambiente
 .venv/
