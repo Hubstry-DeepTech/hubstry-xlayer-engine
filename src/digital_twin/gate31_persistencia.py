@@ -54,8 +54,10 @@ import pandas as pd
 
 try:
     from . import ons_client as ons
+    from .utils import para_numero
 except ImportError:
     import ons_client as ons
+    from utils import para_numero
 
 PREFIXO_EOLICA = "dataset/restricao_coff_eolica_tm/"
 PASSO_HORAS = 0.5
@@ -69,15 +71,6 @@ COD_COLS = ["cod_razaorestricao", "cod_origemrestricao", "dsc_restricao"]
 
 
 # ----------------------------------------------------------------------
-
-def para_numero(s: pd.Series) -> pd.Series:
-    t = s.astype("string").str.strip()
-    t = t.mask(t.isin(["", "-", "nan", "None"]))
-    if t.str.contains(r"\d\.\d{3},", na=False).any():
-        t = t.str.replace(".", "", regex=False)
-    t = t.str.replace(",", ".", regex=False)
-    return pd.to_numeric(t, errors="coerce")
-
 
 def carregar(ano: int, mes: int) -> pd.DataFrame:
     objs = ons.listar(PREFIXO_EOLICA, contendo=f"_{ano}_{mes:02d}.parquet")

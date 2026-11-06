@@ -64,8 +64,10 @@ import pandas as pd
 
 try:
     from . import ons_client as ons
+    from .utils import para_numero
 except ImportError:
     import ons_client as ons
+    from utils import para_numero
 
 PREFIXO_EOLICA = "dataset/restricao_coff_eolica_tm/"
 PREFIXO_SOLAR = "dataset/restricao_coff_fotovoltaica_tm/"
@@ -100,16 +102,6 @@ class BlocoCorte:
 # ----------------------------------------------------------------------
 # Carga e preparo
 # ----------------------------------------------------------------------
-
-def para_numero(s: pd.Series) -> pd.Series:
-    """Colunas de valor chegam como texto, com campo vazio em vez de nulo."""
-    t = s.astype("string").str.strip()
-    t = t.mask(t.isin(["", "-", "nan", "None"]))
-    if t.str.contains(r"\d\.\d{3},", na=False).any():
-        t = t.str.replace(".", "", regex=False)
-    t = t.str.replace(",", ".", regex=False)
-    return pd.to_numeric(t, errors="coerce")
-
 
 def carregar_mes(ano: int, mes: int, fonte: str = "eolica") -> pd.DataFrame:
     prefixo = PREFIXO_EOLICA if fonte == "eolica" else PREFIXO_SOLAR

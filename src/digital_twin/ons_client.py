@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Optional, Set, Tuple
@@ -110,11 +111,23 @@ def procurar_prefixos(termo: str, limite: int = 40) -> List[str]:
 # ----------------------------------------------------------------------
 
 def baixar(key: str, forcar: bool = False) -> Path:
-    destino = DATA_DIR / key.rsplit("/", 1)[-1]
+    destino = DATA_DIR / key.lstrip("/")
     destino.parent.mkdir(parents=True, exist_ok=True)
     if destino.exists() and not forcar:
         return destino
-    _client().download_file(BUCKET, key, str(destino))
+    fd, tmp_path = tempfile.mkstemp(
+        dir=destino.parent,
+        prefix=f".{destino.name}.",
+        suffix=".tmp",
+    )
+    os.close(fd)
+    try:
+        _client().download_file(BUCKET, key, tmp_path)
+        os.replace(tmp_path, destino)
+    except Exception:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+        raise
     return destino
 
 
