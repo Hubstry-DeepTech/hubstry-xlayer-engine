@@ -27,8 +27,10 @@ import pandas as pd
 
 try:
     from . import ons_client as ons
+    from .utils import para_numero
 except ImportError:
     import ons_client as ons
+    from utils import para_numero
 
 PREFIXO_AGG = "dataset/restricao_coff_eolica_tm/"
 ANO, MES = 2025, 1
@@ -40,20 +42,6 @@ VAL_COLS = [
     "val_geracaoreferencia",
     "val_geracaoreferenciafinal",
 ]
-
-
-def para_numero(s: pd.Series) -> pd.Series:
-    """
-    As colunas de valor chegam como texto, com campo VAZIO no lugar de
-    zero/ausente e possivel virgula decimal. Converter antes de
-    qualquer aritmetica.
-    """
-    t = s.astype("string").str.strip()
-    t = t.mask(t.isin(["", "-", "nan", "None"]))
-    t = t.str.replace(".", "", regex=False) if t.str.contains(
-        r"\d\.\d{3},", na=False).any() else t
-    t = t.str.replace(",", ".", regex=False)
-    return pd.to_numeric(t, errors="coerce")
 
 
 def carregar() -> pd.DataFrame:
