@@ -331,7 +331,7 @@ def comparar(
     otimizacao nao entrega automaticamente.
     """
     base = rateio_proporcional(usinas, corte_necessario_mw,
-                               base="disponibilidade")
+                               base="ponto_de_partida")
     idx = {u.id_ons: u for u in usinas}
 
     linhas = []
@@ -369,7 +369,7 @@ if __name__ == "__main__":
     ]
     corte = 600.0
 
-    print("=== BASELINE NORMATIVO — rateio por disponibilidade ===")
+    print("=== REFERENCIA DE PROGRAMACAO (secao 5.1.2-IV) — rateio por disponibilidade ===")
     r1 = rateio_proporcional(usinas, corte, base="disponibilidade")
     print(f"criterio: {r1.criterio}")
     print(r1.como_frame(usinas).to_string(index=False))
@@ -377,8 +377,9 @@ if __name__ == "__main__":
     for o in r1.observacoes:
         print(f"  nota: {o}")
 
-    print("\n=== VARIANTE TEMPO REAL — rateio por ponto de partida ===")
+    print("\n=== BASELINE DE EXECUCAO (secao 6.1) — rateio por ponto de partida ===")
     r2 = rateio_proporcional(usinas, corte, base="ponto_de_partida")
+    print(f"criterio: {r2.criterio}")
     print(r2.como_frame(usinas).to_string(index=False))
     print(f"total cortado: {r2.corte_total_mw} MW   residual: {r2.residual_mw} MW")
 

@@ -14,8 +14,8 @@ Substitui a v1, que usava o dataset _detail_ e derivava o corte de
 36,1% de vies de truncamento em janeiro de 2025 e nao distinguia
 corte de erro da curva vento x potencia.
 
-COLUNA DE CORTE: val_geracaolimitada
-------------------------------------
+COLUNA USADA (SEMANTICA EM REVISAO): val_geracaolimitada
+--------------------------------------------------------
 Evidencia da calibragem (janeiro de 2025):
   - soma 2.465.707 MWmed = 1,233 TWh em base semi-horaria
   - geracao eolica no mes: 5,571 TWh
@@ -53,6 +53,12 @@ LIMITES DO DADO — CITAR SEMPRE QUE O NUMERO FOR USADO
 3. Os dados fazem parte de processo de consistencia recorrente do
    ONS e podem ser revisados apos a publicacao.
 4. Valores em MWmed. Em base semi-horaria, energia = MWmed * 0.5.
+5. AVISO — MAGNITUDE PROVISORIA (pendencia registrada em
+   docs/PROVENIENCIA.md): val_geracaolimitada representa o limite
+   comandado pelo ONS, nao uma medicao de corte, e a diferenca
+   (val_geracaolimitada - val_geracao) produz 29,7% de valores
+   negativos em janeiro de 2025. Nenhum numero de corte agregado deve
+   ir para documento publico ate que essa pendencia seja resolvida.
 """
 
 from __future__ import annotations
@@ -124,7 +130,10 @@ def carregar_mes(ano: int, mes: int, fonte: str = "eolica") -> pd.DataFrame:
 def preparar(df: pd.DataFrame) -> pd.DataFrame:
     """
     Isola as linhas com restricao declarada e calcula a energia
-    cortada. Nao ha derivacao: val_geracaolimitada e o corte apurado.
+    cortada.
+
+    AVISO: a magnitude resultante e provisoria (pendencia registrada em
+    docs/PROVENIENCIA.md).
     """
     if "val_geracaolimitada" not in df.columns:
         raise ValueError("dataset sem val_geracaolimitada — fonte errada?")
@@ -159,6 +168,7 @@ def diagnostico(df: pd.DataFrame) -> dict:
         "geracao_twh": round(ger_twh, 4),
         "taxa_curtailment_pct": round(corte_twh / ger_twh * 100, 1) if ger_twh else None,
         "valores_negativos": int((df["val_geracaolimitada"] < 0).sum()),
+        "status_magnitude": "provisoria (ver docs/PROVENIENCIA.md)",
     }
 
 
@@ -282,6 +292,11 @@ if __name__ == "__main__":
     ANO, MES = 2025, 1
 
     print(f"Carregando restricao de operacao eolica {ANO}-{MES:02d}...")
+    print(
+        "AVISO: a magnitude do corte e PROVISORIA (pendencia registrada em "
+        "docs/PROVENIENCIA.md — nenhum numero agregado deve ir para "
+        "documento publico ate sua resolucao)."
+    )
     df = preparar(carregar_mes(ANO, MES))
 
     print("\n--- Diagnostico ---")
