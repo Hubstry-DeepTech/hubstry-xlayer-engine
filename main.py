@@ -47,8 +47,8 @@ def list_gates():
     }
 
 
-@app.get("/baseline", response_model=BaselineResponse)
-def get_baseline(req: BaselineRequest) -> BaselineResponse:
+@app.post("/baseline", response_model=BaselineResponse)
+def post_baseline(req: BaselineRequest) -> BaselineResponse:
     usinas = [
         Usina(
             id_ons=u.id_ons,

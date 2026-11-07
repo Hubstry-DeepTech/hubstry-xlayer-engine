@@ -1,5 +1,5 @@
 """
-Testes para os endpoints FastAPI em main.py (/, /gates e GET /baseline).
+Testes para os endpoints FastAPI em main.py (/, /gates e POST /baseline).
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ def test_endpoint_gates():
     assert "gate31a_analitico" in dados["available_modules"]
 
 
-def test_endpoint_get_baseline_secao_6_1():
+def test_endpoint_post_baseline_secao_6_1():
     payload = {
         "usinas": [
             {"id_ons": "CJU_A", "nome": "Conjunto A", "disponibilidade_mw": 500.0, "geracao_mw": 420.0},
@@ -38,10 +38,11 @@ def test_endpoint_get_baseline_secao_6_1():
         ],
         "corte_necessario_mw": 600.0,
     }
-    resp = client.request("GET", "/baseline", json=payload)
+    resp = client.post("/baseline", json=payload)
     assert resp.status_code == 200
 
     dados = resp.json()
+    assert "mwh_cortado" not in dados
     assert "6.1" in dados["criterio"]
     assert "ponto de partida" in dados["criterio"]
     assert dados["corte_total_mw"] == pytest.approx(600.0, abs=1e-4)
@@ -53,6 +54,6 @@ def test_endpoint_get_baseline_secao_6_1():
     assert dados["corte_por_usina"]["CJU_D"] == pytest.approx(93.3333, abs=1e-3)
 
 
-def test_endpoint_get_baseline_validacao_pydantic():
-    resp = client.request("GET", "/baseline", json={"usinas": "invalido"})
+def test_endpoint_post_baseline_validacao_pydantic():
+    resp = client.post("/baseline", json={"usinas": "invalido"})
     assert resp.status_code == 422

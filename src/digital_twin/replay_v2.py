@@ -14,8 +14,8 @@ Substitui a v1, que usava o dataset _detail_ e derivava o corte de
 36,1% de vies de truncamento em janeiro de 2025 e nao distinguia
 corte de erro da curva vento x potencia.
 
-COLUNA DE CORTE: val_geracaolimitada
-------------------------------------
+COLUNA USADA (SEMANTICA EM REVISAO): val_geracaolimitada
+--------------------------------------------------------
 Evidencia da calibragem (janeiro de 2025):
   - soma 2.465.707 MWmed = 1,233 TWh em base semi-horaria
   - geracao eolica no mes: 5,571 TWh
@@ -130,7 +130,7 @@ def carregar_mes(ano: int, mes: int, fonte: str = "eolica") -> pd.DataFrame:
 def preparar(df: pd.DataFrame) -> pd.DataFrame:
     """
     Isola as linhas com restricao declarada e calcula a energia
-    cortada. Nao ha derivacao: val_geracaolimitada e o corte apurado.
+    cortada.
 
     AVISO: a magnitude resultante e provisoria (pendencia registrada em
     docs/PROVENIENCIA.md).
