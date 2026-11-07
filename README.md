@@ -29,21 +29,44 @@ Cada destino é descrito por parâmetros explícitos — capacidade, eficiência
 disponibilidade temporal, localização, valor de referência. Nenhum deles é
 dado do ONS.
 
-## Resultados estabelecidos
+## Estatuto dos números: observação, magnitude provisória e contrafactual
 
-Janeiro de 2025, geração eólica, modalidades Tipo I, II-B e II-C:
+Janeiro de 2025, geração eólica, modalidades Tipo I, II-B e II-C. Cada número
+abaixo pertence a uma de três categorias, e a ressalva vale onde quer que o
+número apareça. Os itens que dependem da regra usada para identificar corte
+positivo ficam à parte, em revalidação.
 
-- Episódios de restrição por razão energética formam **blocos sistêmicos de
-  9 a 11,5 horas**, com mais de 130 conjuntos cortados simultaneamente.
-- **95,4% da energia** cortada por essa razão está em episódios de 4 horas
+**Observação de ocorrência.** Contagens de registros do ONS, não magnitudes
+de energia:
+
+- Ocorrências por razão: ENE 22.583, REL 14.666, CNF 4.234.
+- Origem sistêmica em 37.185 contra 4.298 locais.
+
+**Magnitude reconstruída provisória.** A magnitude do corte é reconstruída a
+partir do limite comandado e da geração verificada, e essa reconstrução ainda
+depende de questão normativa em aberto:
+
+- 95,4% da energia cortada por razão energética está em episódios de 4 horas
   ou mais; pulsos de 30 minutos somam 0,2%.
-- Ocorrências por razão: ENE 22.583, REL 14.666, CNF 4.234. Origem sistêmica
-  em 37.185 contra 4.298 locais.
+- 8.560,5 MWh de excedente modelado no evento do Gate 3.1A (ver abaixo).
 
-A duração dos eventos define o que é viável: processos industriais contínuos
-podem ser modelados como cargas sem estado interno; armazenamento exige
-acoplamento temporal e estado de carga; cargas interrompíveis de resposta
-rápida atendem apenas a fração minoritária do problema.
+**Alocação contrafactual.** Resultado de modelo condicionado a premissas, não
+energia recuperada:
+
+- 7.874,7 MWh alocáveis e 685,9 MWh residuais no limite superior do Gate
+  3.1A (ver abaixo).
+
+**Em revalidação.** Dependem da regra usada para identificar corte positivo e
+não devem ser tratados como resultado estabelecido:
+
+- Blocos sistêmicos de razão energética de 9 a 11,5 horas.
+- Mais de 130 conjuntos cortados simultaneamente.
+
+Se a duração dos blocos for confirmada na revalidação, ela define o que é
+viável: processos industriais contínuos podem ser modelados como cargas sem
+estado interno; armazenamento exige acoplamento temporal e estado de carga;
+cargas interrompíveis de resposta rápida atendem apenas a fração minoritária
+do problema.
 
 ## Baseline normativo
 
@@ -86,12 +109,13 @@ O método é escolhido pela estrutura do problema, não assumido de partida.
 ## Gate 3.1A — demonstração de funcionamento
 
 Primeiro cenário sobre evento real de janeiro de 2025: 142 conjuntos,
-8.560,5 MWh de excedente modelado, grade de nove combinações entre três
+8.560,5 MWh de excedente modelado (magnitude reconstruída provisória), grade
+de nove combinações entre três
 capacidades de destino (50, 150 e 300 MW) e três coberturas (10, 30 e todos
 os conjuntos).
 
 No limite superior contrafactual — 300 MW e cobertura total — 7.874,7 MWh
-foram alocáveis, com 685,9 MWh residuais.
+foram alocáveis, com 685,9 MWh residuais (alocação contrafactual).
 
 Isso demonstra que a arquitetura funciona sobre dado real. **Não significa
 que essa energia seria recuperável no SIN.** Ver `docs/GATE_3_1A.md` para as
